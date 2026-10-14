@@ -1,0 +1,62 @@
+﻿#pragma once
+
+#include "CoreMinimal.h"
+#include "Common_AnimInstance.h" // Include the correct base class header
+#include "Enemy_AnimInstance.generated.h"
+
+/**
+*
+*/
+UCLASS()
+class DEDICATEDPROJECT_API UEnemy_AnimInstance : public UCommon_AnimInstance // Use UCommon_AnimInstance as base
+{
+	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+	void AnimNotify_AttackRangeCheck();
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	UAnimMontage* GetRandomAttackMontage();
+
+	virtual void PlayStunMontage(float Duration = 1.0f) override;
+	virtual void EndStunMontage() override;
+
+	void SetWandering(bool bWandering) { IsWandering = bWandering; }
+
+	bool GetWandering() const { return IsWandering; }
+
+	void SetGoingLeft(bool bLeft) { IsGoingLeft = bLeft; }
+
+	bool GetGoingLeft() const { return IsGoingLeft; }
+
+	void SetIsGoingBack(bool bBack) { bIsGoingBack = bBack; }
+
+	bool GetIsGoingBack() const { return bIsGoingBack; }
+
+//protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn")
+	bool IsWandering = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn")
+	bool IsGoingLeft = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn")
+	bool bIsGoingBack = false;
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "Stun", meta = (AllowPrivateAccess = true))
+	bool IsStuned = false;
+
+	float StunDuration = 0.0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackPattern1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackPattern2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack", meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackPattern3;
+};
